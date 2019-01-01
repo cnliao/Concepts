@@ -28,15 +28,11 @@ An `Integral Indexable` object `x` is `Natural` iff x[i] is defined on `[1,N1]×
 ### BroadcastStyle
 An object `S` is a BroadcastStyle iff, given a function `f` and a tuple of `Indexable`s `args`,
  the following apply:
-* `broadcast_combine(S, args)` is defined and returns an object `bc` that satisfies:
+* `broadcast_plan(S, f, args)` is defined and returns an object `bc` that satisfies:
     1. `bc` is `Indexable`;
     2. `indices_map(bc, arg)` is defined and returns a `Function` from `indices(bc)`
         to `indices(arg)` for all `arg` in `args`;
-    3. `bc[i] == (args[1][indices_map(bc, args[1])(i)], args[2][indices_map(bc, args[2])(i)]), ...)`
-* `broadcast_apply(f, bc, kws)` is defined and returns an object `bcf` that satisfies:
-    1. `bcf` is `indexable`;
-    2. `indices(bcf) == indices(bc)`;
-    3. `bcf[i] == f(bc[i]...; kws)` for all `i` in `indices(bc)`;
+    3. `bc[i] == f(args[1][indices_map(bc, args[1])(i)], args[2][indices_map(bc, args[2])(i)]), ...)`
 * `broadcast_assign!(bc)` is defined if `args` has exactly two elements. It has the following side effect:
 
     `args[1][indices_map(bc, args[1])(i)] == args[2][indices_map(bc, args[2])(i)])` for all `i` in `indices(bc)`.
